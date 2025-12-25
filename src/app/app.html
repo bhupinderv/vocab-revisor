@@ -2,7 +2,11 @@
   <h1>📘 Vocabulary Reviser</h1>
 
   <div *ngIf="!completed">
-    <p><strong>Words remaining:</strong> {{ wordsRemaining }}</p>
+    <p><strong>Current List:</strong> List&lt;{{ roundNumber }}&gt;</p>
+    <p><strong>Total words in this List:</strong> {{ totalWordsInRound }}</p>
+    <p><strong>Words remaining in this round:</strong> {{ activeList.length }}</p>
+    <p><strong>Errors in this round:</strong> {{ errorList.length }}</p>
+    <p><strong>Success % this round:</strong> {{ successPercentage }}%</p>
 
     <p class="word-display" *ngIf="currentWord">
       What is the meaning of "<strong>{{ currentWord.word }}</strong>"?
