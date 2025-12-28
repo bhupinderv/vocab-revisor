@@ -8,22 +8,19 @@
   }
   
   /* =========================
-     Main container (card)
+     Base page setup
      ========================= */
-  .container {
-    width: 100%;
-    max-width: 520px;
-    padding: 28px;
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
   
-    background: #ffffff;
-    border-radius: 14px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-  
-    text-align: center;
+  body {
+    background: #f1f5f9;
   }
   
   /* =========================
-     Headings
+     Headings & Text
      ========================= */
   h1 {
     margin-bottom: 20px;
@@ -36,18 +33,17 @@
     margin-top: 30px;
   }
   
-  /* =========================
-     Status text
-     ========================= */
+  .completion-title,
+  .errors-title {
+    margin-top: 24px;
+  }
+  
   p {
     margin: 6px 0;
     color: #475569;
     font-size: 0.95rem;
   }
   
-  /* =========================
-     Word question
-     ========================= */
   .word-display {
     font-size: 1.4rem;
     margin: 24px 0;
@@ -55,79 +51,146 @@
   }
   
   /* =========================
-     Input field
+     Interactive Elements
      ========================= */
   input {
     width: 100%;
     padding: 12px 14px;
     font-size: 1rem;
-  
     border-radius: 10px;
     border: 1px solid #cbd5e1;
-  
     margin-top: 10px;
-  
-    transition: border-color 0.2s, box-shadow 0.2s;
   }
   
-  input::placeholder {
-    color: #94a3b8;
-  }
-  
-  input:focus {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-  }
-  
-  /* =========================
-     Submit button
-     ========================= */
   button {
     width: 100%;
     margin-top: 14px;
     padding: 12px;
-  
     font-size: 1rem;
     font-weight: 600;
-  
     border-radius: 10px;
     border: none;
-  
     background: #6366f1;
     color: #ffffff;
-  
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
   }
   
-  button:hover {
-    background: #4f46e5;
-  }
+/* =========================
+   Page scroll wrapper (ONLY scroll owner)
+   ========================= */
+   .page-wrapper {
+    overflow-anchor: none;
+    min-height: 100vh;
+    width: 100%;
   
-  button:active {
-    transform: scale(0.98);
-  }
+    display: flex;
+    justify-content: center;
+    
+    /* FIX: align-items: flex-start ensures the card starts at the top.
+       This prevents the top of the card from being clipped when the list is long. */
+    align-items: flex-start;
   
-  /* =========================
-     Feedback message
-     ========================= */
-  .feedback {
-    margin-top: 18px;
-    font-weight: 600;
-    font-size: 1rem;
-  }
+    padding: 40px 16px;
+    box-sizing: border-box;
   
-  /* Hide feedback space when empty */
-  .feedback:empty {
-    display: none;
-  }
-  
-  /* =========================
-     Optional: scroll safety
-     ========================= */
-  .container {
-    max-height: 90vh;
+    /* Ensures the page wrapper is the primary scroll container */
     overflow-y: auto;
   }
   
+  /* =========================
+     Main container (CARD ONLY)
+     ========================= */
+  .container {
+    width: 100%;
+    max-width: 520px;
+    padding: 28px;
+  
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  
+    text-align: center;
+  
+    /* FIX: flex-shrink: 0 prevents the container from compressing its height.
+       Using display: block ensures it grows naturally with the long list. */
+    display: block; 
+    flex-shrink: 0;
+    
+    /* Adds a margin at the bottom so the card doesn't hit the screen edge when scrolling */
+    margin-bottom: 40px;
+  }
+
+    /* =========================
+     Result container (CARD ONLY)
+     ========================= */
+     .result {
+    text-align: center;
+  
+    position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+    }
+  
+  /* =========================
+     Final error list
+     ========================= */
+  .final-errors-list {
+    overflow-anchor: none;
+    margin-top: 12px;
+    padding: 10px;
+  
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  
+    /* FIX: Ensure the list stretches the white container background 
+       instead of creating its own internal scrollbar. */
+    max-height: none; 
+    overflow: visible;
+    text-align: left; /* Better readability for lists */
+  }
+  
+  .final-errors-list ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  
+  .final-errors-list li {
+    margin-bottom: 8px;
+    color: #334155;
+  }
+
+.scroll-container {
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0; /* important for sticky */
+}
+
+.list-heading {
+  padding: 10px;
+  margin: 0;
+  background: #f9f9f9;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.list-heading.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-list li {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}

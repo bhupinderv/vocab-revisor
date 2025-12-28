@@ -13,10 +13,15 @@ interface VocabItem {
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './app.html',
+  styleUrls: ['./app.css'], // Make sure this path is correct!
 })
 export class App implements OnInit {
+  // Existing properties
+  showPrompt = false; // New property to control the visibility of the prompt
+
   activeList: VocabItem[] = [];
   errorList: VocabItem[] = [];
+  finalErrorList: VocabItem[] = [];
 
   currentWord: VocabItem | null = null;
   userAnswer = '';
@@ -94,6 +99,9 @@ export class App implements OnInit {
       return;
     }
 
+    // prepare next round using errorList
+    this.addErrorsToFinalList();
+
     // Move error list → active list
     this.activeList = [...this.errorList];
     this.errorList = [];
@@ -103,6 +111,9 @@ export class App implements OnInit {
     //this.feedback = `🔁 Starting List<${this.roundNumber}>`;
     this.feedback = '';
 
+    // Show the prompt before advancing to the next round
+    this.showPrompt = true;
+
     this.pickRandomWord();
   }
 
@@ -111,5 +122,48 @@ export class App implements OnInit {
     this.correctInRound = 0;
     this.successPercentage = 0;
     this.answeredInRound = 0;
+  }
+
+  handlePromptResponse(continueGame: boolean) {
+    console.log('User selected to ' + (continueGame ? 'continue' : 'exit'));
+    this.showPrompt = false; // Hide the prompt
+    console.log('showPrompt set to ' + this.showPrompt);
+    console.log('continueGame set to ' + continueGame);
+    console.log('Error list length: ' + this.errorList.length);
+
+    if (continueGame) {
+      console.log('Continuing to next round');
+      //this.advanceRound();
+    } else {
+      // Exit the program (mark as completed)
+      this.completed = true;
+      this.currentWord = null;
+    }
+  }
+
+  addErrorsToFinalList() {
+    // Add unique errors to finalErrorList
+    /*
+    this.errorList.forEach(item => {
+      const alreadyExists = this.finalErrorList.some(
+        e => e.word === item.word
+      );
+  
+      if (!alreadyExists) {
+        this.finalErrorList.push({
+          word: item.word,
+          meaning: item.meaning
+        });
+      }
+    });
+    */
+
+    // Add all errors including duplicates to finalErrorList
+    this.errorList.forEach((item) => {
+      this.finalErrorList.push({
+        word: item.word,
+        meaning: item.meaning,
+      });
+    });
   }
 }

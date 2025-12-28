@@ -1,28 +1,58 @@
-<div class="container">
-  <h1>📘 Vocabulary Reviser</h1>
-
-  <div *ngIf="!completed">
-    <p><strong>Current List:</strong> List&lt;{{ roundNumber }}&gt;</p>
-    <p><strong>Total words in this List:</strong> {{ totalWordsInRound }}</p>
-    <p><strong>Words remaining in this round:</strong> {{ activeList.length }}</p>
-    <p><strong>Errors in this round:</strong> {{ errorList.length }}</p>
-    <p><strong>Success % this round:</strong> {{ successPercentage }}%</p>
-
-    <p class="word-display" *ngIf="currentWord">
-      What is the meaning of "<strong>{{ currentWord.word }}</strong>"?
-    </p>
-
-    <input 
-      [(ngModel)]="userAnswer" 
-      placeholder="Type meaning here" 
-      (keydown.enter)="checkAnswer()"
-    />
-    <button (click)="checkAnswer()">Submit</button>
-
-    <p class="feedback">{{ feedback }}</p>
-  </div>
-
-  <div *ngIf="completed">
-    <h2>🎉 Congratulations! You have revised all vocabulary items.</h2>
+<!-- PROMPT OVERLAY -->
+<div *ngIf="showPrompt" class="prompt-overlay">
+  <div class="prompt-box">
+    <p>Do you want to continue to the next round?</p>
+    <button (click)="handlePromptResponse(true)">Yes</button>
+    <button (click)="handlePromptResponse(false)">No</button>
   </div>
 </div>
+
+<!-- PAGE SCROLL WRAPPER -->
+<div class="page-wrapper" *ngIf="!showPrompt">
+
+  <!-- CARD -->
+  <div class="container"  *ngIf="!completed">
+
+    <h1>📘 Vocabulary Reviser</h1>
+
+    <!-- ACTIVE ROUND -->
+    <ng-container>
+
+      <p><strong>Current List:</strong> List&lt;{{ roundNumber }}&gt;</p>
+      <p><strong>Total words in this List:</strong> {{ totalWordsInRound }}</p>
+      <p><strong>Words remaining in this round:</strong> {{ activeList.length }}</p>
+      <p><strong>Errors in this round:</strong> {{ errorList.length }}</p>
+      <p><strong>Success % this round:</strong> {{ successPercentage }}%</p>
+
+      <p class="word-display" *ngIf="currentWord">
+        What is the meaning of "<strong>{{ currentWord.word }}</strong>"?
+      </p>
+
+      <input
+        [(ngModel)]="userAnswer"
+        placeholder="Type meaning here"
+        (keydown.enter)="checkAnswer()"
+      />
+
+      <button (click)="checkAnswer()">Submit</button>
+
+      <p class="feedback">{{ feedback }}</p>
+
+    </ng-container>
+  </div>
+</div>
+
+    <div class="result container" *ngIf="completed">
+      <h1 class="completion-title list-heading sticky">📘 Vocabulary Reviser</h1>
+      <h2 class="completion-title list-heading sticky">
+        🎉 Congratulations! You have revised all vocabulary items. <br>
+        🧠 Words you struggled with
+    </h2>
+    
+      <ul class="item-list scroll-container">
+        <li *ngFor="let item of activeList">
+          <strong>{{ item.word }}</strong> = {{ item.meaning }}
+        </li>
+      </ul>
+    </div>
+
