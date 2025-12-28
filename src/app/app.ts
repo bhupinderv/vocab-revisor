@@ -108,6 +108,8 @@ export class App implements OnInit {
 
     this.roundNumber++;
     this.successPercentage = 0;
+    this.correctInRound = 0;
+    this.answeredInRound = 0;
     //this.feedback = `🔁 Starting List<${this.roundNumber}>`;
     this.feedback = '';
 
